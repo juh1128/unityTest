@@ -23,8 +23,10 @@ public class tutorialController : MonoBehaviour {
 
     bool isSliding = false;
     int nowDisplayIndex = 0;
+    AnySwipe swipe;
 
 	void Start () {
+        swipe = GetComponent<AnySwipe>();
         imagePanel = tutorialPanel.transform.FindChild("ImagePanel").gameObject;
         handlePanel = tutorialPanel.transform.FindChild("HandlePanel").gameObject;
 
@@ -70,6 +72,21 @@ public class tutorialController : MonoBehaviour {
         logoPanel.SetActive(false);
         tutorialPanel.SetActive(true);
 	}
+
+    void Update()
+    {
+        if (swipe.IsSwiped())
+        {
+            if (swipe.CheckForSwipe(Vector2.right))
+            {
+                movePrev();
+            }
+            else if (swipe.CheckForSwipe(-Vector2.right))
+            {
+                moveNext();
+            }
+        }
+    }
 
     IEnumerator downLoadResource(string directory, string type, Image targetImage)
     {
