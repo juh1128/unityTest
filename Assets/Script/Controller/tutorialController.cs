@@ -86,6 +86,11 @@ public class tutorialController : MonoBehaviour {
                 moveNext();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     IEnumerator downLoadResource(string directory, string type, Image targetImage)
@@ -100,6 +105,8 @@ public class tutorialController : MonoBehaviour {
         Sprite newSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         targetImage.sprite = newSprite;
         targetImage.color = new Color(1, 1, 1, 1);
+
+        Destroy(targetImage.transform.FindChild("ajaxLoader").gameObject);
     }
 
     void moveReady()
