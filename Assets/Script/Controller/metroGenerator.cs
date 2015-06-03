@@ -9,7 +9,7 @@ public class metroData
     public Vector2 position;
     public Vector2 scale;
     public string thumbnail;
-    public string connectType;
+    public string connectType; //url, 또는 menu
     public string typeInfo;
 
     metroData()
@@ -65,6 +65,14 @@ public class metroGenerator : MonoBehaviour {
             StartCoroutine(downLoadThumbnail(metroBtnData[i].thumbnail, metroBtn.GetComponent<Image>()));
 
             //메뉴 연결
+            if (metroBtnData[i].connectType == "menu")
+            {
+                connectMenu(metroBtn.GetComponent<Button>(), metroBtnData[i].typeInfo);
+            }
+            else if (metroBtnData[i].connectType == "url")
+            {
+
+            }
 
         }
 	}
@@ -81,5 +89,11 @@ public class metroGenerator : MonoBehaviour {
         targetImage.color = new Color(1, 1, 1, 1);
 
         Destroy(targetImage.transform.FindChild("ajaxLoader").gameObject);
+    }
+
+    void connectMenu(Button btn, string menu)
+    {
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener( () => contentPanel.GetComponent<metroBtnController>().popupMenu(menu,btn.gameObject) );
     }
 }

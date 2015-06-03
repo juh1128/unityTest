@@ -131,6 +131,7 @@ public class tutorialController : MonoBehaviour {
             }
             else
             {
+                PlayerPrefsPlus.SetBool("tutorial", true);
                 Application.LoadLevel("main");
             }
         }

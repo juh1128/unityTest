@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AnySwipe : MonoBehaviour {
+public class AnySwipe : MonoBehaviour{
 
 	public int		minLenght = 50;			//the minimum length to be consider an swipe 
 
@@ -20,6 +20,12 @@ public class AnySwipe : MonoBehaviour {
 	private bool	reset;
 	private bool	isTouchDown;
 	
+
+    //150602 정유훈 추가
+    //해당 스크립트가 들어있는 게임 오브젝트 내부에서만 스와이프 판정을 가린다.
+    //private RectTransform rectTran;
+
+
 	//Get current swipe direction
 	public Vector2	Dir{
 		
@@ -37,8 +43,12 @@ public class AnySwipe : MonoBehaviour {
 	}
 	#endif
 	//-------------------------
-	
-	
+
+    //void Start()
+    //{
+    //    rectTran = gameObject.GetComponent<RectTransform>();
+    //}
+
 	//-------------------------
 	public bool CheckForSwipe (Vector2 swipe) {
 
@@ -77,8 +87,39 @@ public class AnySwipe : MonoBehaviour {
 
 	}
 	//-------------------------
-	
-	
+
+
+
+    //bool isPointContain(Vector2 pos)
+    //{
+    //    //현재 이벤트 시스템의 PointerEnter 객체가 이 스크립트 게임오브젝트의 자식 객체인가?
+    //    Transform temp = null;
+    //    if (globalSetup.pointerDownObj)
+    //    {
+    //        temp = globalSetup.pointerDownObj.transform;
+    //    }
+    //    bool isChild = false;
+    //    while (temp)
+    //    {
+    //        Debug.Log(temp.gameObject);
+    //        if (temp.gameObject == gameObject)
+    //        {
+    //            isChild = true;
+    //            break;
+    //        }
+    //        temp = temp.transform.parent;
+    //    }
+    //    if(isChild)
+    //    {
+    //        if (rectTran.rect.Contains(pos))
+    //        {
+    //            Debug.Log("true");
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
+
 	//-------------------------
 
 	public bool IsSwiped(){
@@ -90,11 +131,10 @@ public class AnySwipe : MonoBehaviour {
 			if(!isTouchDown){
 
 				if(Input.GetMouseButtonDown(0)){
-						
-					isInit = true;
-					isTouchDown = true;
-					touchStart = Input.mousePosition;
-
+                    //Vector2 coordTransPos = new Vector2(Input.mousePosition.x + Screen.width * -0.5f, Input.mousePosition.y + Screen.height * -0.5f);
+                    isInit = true;
+                    isTouchDown = true;
+                    touchStart = Input.mousePosition;
 
 				}
 			}
@@ -135,13 +175,11 @@ public class AnySwipe : MonoBehaviour {
 				Touch touch = Input.GetTouch(0);
 				
 				if(!isTouchDown){
+                    isInit = true;
 
-					isInit = true;
+                    isTouchDown = true;
 
-					isTouchDown = true;
-					
-					touchStart = touch.position;
-
+                    touchStart = touch.position;
 					
 				}
 				else{
@@ -184,12 +222,10 @@ public class AnySwipe : MonoBehaviour {
 
 		if(!isTouchDown){
 			
-			if(Input.GetMouseButtonDown(0)){
-				
+			if(Input.GetMouseButtonDown(0)){			
 				isInit = true;
 				isTouchDown = true;
 				touchStart = Input.mousePosition;
-				
 				
 			}
 		}
@@ -222,7 +258,7 @@ public class AnySwipe : MonoBehaviour {
 
 
 
-		#elif UNITY_IOS || UNITY_ANDROID
+#elif UNITY_IOS || UNITY_ANDROID
 
 		if(Input.touchCount > 0){
 			
@@ -230,7 +266,6 @@ public class AnySwipe : MonoBehaviour {
 			Touch touch = Input.GetTouch(0);
 			
 			if(!isTouchDown){
-
 				isInit = true;
 
 				isTouchDown = true;
@@ -272,9 +307,9 @@ public class AnySwipe : MonoBehaviour {
 			}
 		}
 
-		#endif
+#endif
 
-		if(reset){
+        if (reset){
 
 			reset = false;
 			isInit = false;

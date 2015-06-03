@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class appManager : MonoBehaviour {
 
+    public GameObject backBtn;
+
 	void Start () {
-	
+        Init();
 	}
 	
 	void Update () {
@@ -14,6 +17,8 @@ public class appManager : MonoBehaviour {
         }
 	}
 
-
-
+    void Init()
+    {
+        globalSetup.backBtn = backBtn;
+    }
 }
