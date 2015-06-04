@@ -9,21 +9,21 @@ public class metroData
     public Vector2 position;
     public Vector2 scale;
     public string thumbnail;
-    public string connectType; //url, 또는 menu
-    public string typeInfo;
+    public string url; 
+    public int menu;
 
     metroData()
     {
         position = new Vector2(1, 1);
         scale = new Vector2(1, 1);
     }
-    metroData(Vector2 pos, Vector2 scale, string thumbnail, string connectType, string typeInfo)
+    metroData(Vector2 pos, Vector2 scale, string thumbnail, string url, int menu)
     {
         position = pos;
         this.scale = scale;
         this.thumbnail = thumbnail;
-        this.connectType = connectType;
-        this.typeInfo = typeInfo;
+        this.url = url;
+        this.menu = menu;
     }
 }
 
@@ -40,7 +40,6 @@ public class metroGenerator : MonoBehaviour {
             //버튼 생성
             GameObject metroBtn = (GameObject)Instantiate(metroPrefab);
             RectTransform metroRectTran = metroBtn.GetComponent<RectTransform>();
-            metroRectTran.SetParent(contentPanel.transform);
 
             //사이즈 설정
             /* 기본적으로 패널width/3 * scale.x, 패널height/4 * scale.y */
@@ -50,6 +49,8 @@ public class metroGenerator : MonoBehaviour {
             float width = panelSize.x / 3 * metroBtnData[i].scale.x;
             float height = panelSize.y / 4 * metroBtnData[i].scale.y;
             metroRectTran.sizeDelta = new Vector2(width-padding*2, height-padding*2);
+
+            metroRectTran.SetParent(contentPanel.transform);
 
             //앵커 위치 지정
             /* X앵커: 0.333333f * (열 - 1) x가 열 / y가 행
@@ -65,13 +66,13 @@ public class metroGenerator : MonoBehaviour {
             StartCoroutine(downLoadThumbnail(metroBtnData[i].thumbnail, metroBtn.GetComponent<Image>()));
 
             //메뉴 연결
-            if (metroBtnData[i].connectType == "menu")
-            {
-                connectMenu(metroBtn.GetComponent<Button>(), metroBtnData[i].typeInfo);
-            }
-            else if (metroBtnData[i].connectType == "url")
+            if (metroBtnData[i].url != "")
             {
 
+            }
+            else if(metroBtnData[i].menu != 0)
+            {
+                connectMenu(metroBtn.GetComponent<Button>(), i, metroBtnData[i].menu);
             }
 
         }
@@ -91,9 +92,11 @@ public class metroGenerator : MonoBehaviour {
         Destroy(targetImage.transform.FindChild("ajaxLoader").gameObject);
     }
 
-    void connectMenu(Button btn, string menu)
+    void connectMenu(Button btn, int index, int menu)
     {
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener( () => contentPanel.GetComponent<metroBtnController>().popupMenu(menu,btn.gameObject) );
+        moveNextPage script = btn.gameObject.AddComponent<moveNextPage>();
+        script.isSaveHistory = true;
+        script.isReverse = false;
+        script.nextPage = Framework.Instance.getMenuPage(metroBtnData[index].menu - 1);
     }
 }
